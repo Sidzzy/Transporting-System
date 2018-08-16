@@ -1,6 +1,5 @@
 <?php
 error_reporting(1);
-//edited
 //$con=mysql_connect("localhost","root","");
 //mysql_select_db("vssut",$con);
 $servername = "localhost";

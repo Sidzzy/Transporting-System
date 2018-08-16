@@ -1,8 +1,7 @@
 <?php
     session_start();
-    $_SESSION['id']=0;
     include 'dbconnect.php';       
-    // $type=$_GET['type'];
+    $type=$_GET['type'];
     if(isset($_POST['tspsubmit'])){
         $nameErr=$agencynameErr= $phoneErr = $addressErr = $licenceErr = $usernameErr=$passwordErr=
         $cpasswordErr="";
@@ -78,16 +77,11 @@
         }
     }
     if(isset($_POST['driversubmit'])){
-        $nameErr=$agencynameErr= $phoneErr = $addressErr = $licenceErr = $usernameErr=$passwordErr=
-        $cpasswordErr="";
-        if (empty($_POST["owner_name"]))
+        $nameErr= $licenceErr = $usernameErr=$passwordErr=$cpasswordErr="";
+        if (empty($_POST["name"]))
             $nameErr = "Name is required";
-        if (empty($_POST["agency_name"]))
-            $agencynameErr = "Agency_name is required";
-        if (empty($_POST["address"]))
-            $addressErr = "Address is required";
-        if (empty($_POST["contact"]))
-            $phoneErr = "Contact is required";
+        // if (empty($_POST["contact"]))
+        //     $phoneErr = "Contact is required";
         if (empty($_POST["username"]))
             $usernameErr = "UserName is required";
         if (empty($_POST["licence"]))
@@ -96,14 +90,14 @@
             $passwordErr = "Password is required";
         if (empty($_POST["cpassword"]) || strcmp($_POST["cpassword"],$_POST["password"]))
             $cpasswordErr = "Incorrect Pasword";
-        $Err=$nameErr.$agencynameErr.$phoneErr.$addressErr.$usernameErr.$passwordErr.$cpasswordErr.$licenceErr;
+        $Err=$nameErr.$usernameErr.$passwordErr.$cpasswordErr.$licenceErr;
         echo $Err;
         if(empty($Err)){
             $sql=
             "
-            INSERT INTO tsp VALUES
-            ('".$_POST['owner_name']."','".$_POST['agency_name']."','".$_POST['address']."','".$_POST['contact']."',
-            '".$_POST['username']."','".$_POST['licence']."','".md5($_POST['password'])."')
+            INSERT INTO driver VALUES
+            ('".$_POST['username']."','".$_POST['name']."','".$_SESSION['id']."',
+            'NULL','".$_POST['licence']."','".md5($_POST['password'])."')
             ";
 
             if(mysqli_query($conn,$sql)){
@@ -235,56 +229,49 @@
                                 </button>
                             </div>
                         </form>
-                        <?php } else if($_GET['type']=="driver") {?>
-                        <form  class="" method="post" 
+                        <?php } else if($_GET['type']=="driver") {
+                                $sql="SELECT username FROM tsp WHERE username='".$_SESSION['id']."'";
+                                $result=$conn->query($sql);
+                                if($result->num_rows <= 0){
+                                    echo "<script>alert('U r not allowed to visit here.')</script>";
+                                    header('location: index.php');
+                                }
+                        ?>
+                        <form  class="" method="post"
                         action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
                             <div class="form-group">
                                 <label>Name:</label>
                                 <span class="error">* <?php echo $nameErr;?></span>
-                                <input class="form-control" type="text" name="Name">
+                                <input class="form-control" type="text" name="name">
                             </div>
-                            <div class="form-group">    
-                                <label>DOB:</label>
-                                <span class="error">* <?php echo $dobErr;?></span>
-                                <input class="form-control" type="date" name="DOB">
-                            </div>
-                            <div class="form-group">
-                                <label>Gender:</label>
-                                <span class="error">* <?php echo $genderErr;?></span><br>
-                                <label class="radio-inline"><input type="radio" name="Gender" value="Male">Male</label>
-                                <label class="radio-inline"><input type="radio" name="Gender" value="Female">Female
-                                <label>
-                                <label class="radio-inline"><input type="radio" name="Gender" value="Other">Other
-                                </label>
-                            </div>
-                            <div class="form-group">
-                                <label>Phone Number:</label>
+                            <!-- <div class="form-group">    
+                                <label>Phone:</label>
                                 <span class="error">* <?php echo $phoneErr;?></span>
-                               <input class="form-control" type="text" name="Phone">
+                                <input class="form-control" type="text" name="contact">
+                            </div> -->
+                            <div class="form-group">    
+                                <label>Licence Number:</label>
+                                <span class="error">* <?php echo $licenceErr;?></span>
+                                <input class="form-control" type="text" name="licence">
+                            </div> 
+                            <div class="form-group">
+                                <label>Username:</label>
+                                <span class="error">* <?php echo $usernameErr;?></span>
+                               <input class="form-control" type="text" name="username">
                            </div>
                            <div class="form-group">
-                                <label>Email:</label>
-                                <span class="error">* <?php echo $emailErr;?></span>
-                                <input class="form-control" type="text" name="Email">
-                            </div>
-                            <div class="form-group">
-                                <label>User Nmae:</label>
-                                <span class="error">* <?php echo $usernameErr;?></span>
-                                <input class="form-control" type="text" name="Username">
-                            </div>
-                            <div class="form-group">
-                                <label>PassWord:</label>
+                                <label>Password:</label>
                                 <span class="error">* <?php echo $passwordErr;?></span>
-                                <input class="form-control" type="password" name="PassWord">
+                                <input class="form-control" type="password" name="password">
                             </div>
                             <div class="form-group">
                                 <label>Confirm Password:</label>
                                 <span class="error">* <?php echo $cpasswordErr;?></span>
-                               <input class="form-control" type="password" name="CPassword">
+                               <input class="form-control" type="password" name="cpassword">
                             </div>
                             <div class="form-group" style="text-align: center;">
                                 <button 
-                                type="submit" name="submit" class="btn" style="color:black; margin-bottom:5%; 
+                                type="submit" name="driversubmit" class="btn" style="color:black; margin-bottom:5%; 
                                 margin-top:2%;">
                                     Submit
                                 </button>
