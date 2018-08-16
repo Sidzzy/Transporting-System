@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 29, 2018 at 07:14 AM
+-- Generation Time: Aug 16, 2018 at 07:30 AM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.2
 
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `driver` (
-  `id` varchar(100) NOT NULL,
+  `username` varchar(100) NOT NULL,
   `name` varchar(100) NOT NULL,
   `working_under` varchar(100) NOT NULL,
   `trips` int(5) NOT NULL,
@@ -39,8 +39,9 @@ CREATE TABLE `driver` (
 -- Dumping data for table `driver`
 --
 
-INSERT INTO `driver` (`id`, `name`, `working_under`, `trips`, `licence`, `password`) VALUES
-('sidzzy', 'sid singhal', 'sidzzy', 0, 'abcd', '81dc9bdb52d04dc20036dbd8313ed055');
+INSERT INTO `driver` (`username`, `name`, `working_under`, `trips`, `licence`, `password`) VALUES
+('sidzzy', 'sid singhal', 'sidzzy', 0, 'abcd', '1234'),
+('sidzzzy', 'sid', 'sidzzy', 0, '12', '81dc9bdb52d04dc20036dbd8313ed055');
 
 -- --------------------------------------------------------
 
@@ -96,6 +97,7 @@ INSERT INTO `user` (`Name`, `phone`, `username`, `password`) VALUES
 
 CREATE TABLE `vehicle` (
   `number` varchar(100) NOT NULL,
+  `tspid` varchar(100) NOT NULL,
   `type` varchar(20) NOT NULL,
   `capacity` int(10) NOT NULL,
   `source` varchar(100) NOT NULL,
@@ -105,6 +107,13 @@ CREATE TABLE `vehicle` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping data for table `vehicle`
+--
+
+INSERT INTO `vehicle` (`number`, `tspid`, `type`, `capacity`, `source`, `destination`, `timing`, `trips`) VALUES
+('OD15J1890', 'sidzzy', 'Van', 10, 'Burla', 'Sambalpur', '10:00:00', 0);
+
+--
 -- Indexes for dumped tables
 --
 
@@ -112,7 +121,7 @@ CREATE TABLE `vehicle` (
 -- Indexes for table `driver`
 --
 ALTER TABLE `driver`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`username`),
   ADD UNIQUE KEY `licence` (`licence`);
 
 --
