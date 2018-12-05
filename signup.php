@@ -3,8 +3,8 @@
     include 'dbconnect.php';       
     $type=$_GET['type'];
     if(isset($_POST['tspsubmit'])){
-        $nameErr=$agencynameErr= $phoneErr = $addressErr = $licenceErr = $usernameErr=$passwordErr=
-        $cpasswordErr="";
+        $nameErr=$agencynameErr= $phoneErr = $addressErr = $licenceErr = $usernameErr=
+        $passwordErr=$cpasswordErr="";
         if (empty($_POST["owner_name"]))
             $nameErr = "Name is required";
         if (empty($_POST["agency_name"]))
@@ -33,7 +33,7 @@
 
             if(mysqli_query($conn,$sql)){
                 echo "<script>alert('Successfull Signup')</script>";
-                echo "<script>self.location='login.php?type=tsp';</script>";
+                echo "<script>self.location='tspprofile.php?type=tsp';</script>";
             }
             else{
                 echo "<script>alert('The data is not inserted')</script>";
@@ -97,7 +97,8 @@
             "
             INSERT INTO driver VALUES
             ('".$_POST['username']."','".$_POST['name']."','".$_SESSION['id']."',
-            'NULL','".$_POST['licence']."','".md5($_POST['password'])."')
+            'NULL','".$_POST['licence']."','".$_POST['password']."',
+            '".$_POST['contact']."')
             ";
 
             if(mysqli_query($conn,$sql)){
@@ -244,11 +245,11 @@
                                 <span class="error">* <?php echo $nameErr;?></span>
                                 <input class="form-control" type="text" name="name">
                             </div>
-                            <!-- <div class="form-group">    
+                            <div class="form-group">    
                                 <label>Phone:</label>
                                 <span class="error">* <?php echo $phoneErr;?></span>
                                 <input class="form-control" type="text" name="contact">
-                            </div> -->
+                            </div> 
                             <div class="form-group">    
                                 <label>Licence Number:</label>
                                 <span class="error">* <?php echo $licenceErr;?></span>

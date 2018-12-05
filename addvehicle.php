@@ -1,4 +1,3 @@
-<!-- working -->
 <?php
     session_start();
     if(!$_SESSION['id'] || $_SESSION['type']!="tsp")
@@ -22,7 +21,7 @@
         if (empty($_POST["trips"]))
             $passwordErr = "Trips is required";
         $Err=$numberErr.$typeErr.$capacityErr.$sourceErr.$destinationErr.$timingErr.
-        $tripsErr;
+        $tripsErr;  
         echo $Err;
         if(empty($Err)){
             include 'dbconnect.php';
